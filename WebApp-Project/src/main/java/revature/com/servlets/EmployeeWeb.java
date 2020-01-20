@@ -60,7 +60,7 @@ public class EmployeeWeb extends HttpServlet {
       session.setAttribute("id", employee.getId());
     }
       resp.getWriter().write(om.writeValueAsString(employee));
-    } else resp.getWriter().write(om.writeValueAsString(null));
+    } else resp.sendRedirect("http://www.javatpoint.com");  ;
     }
     else if(tokens[3].equals("resolved")) {
       Integer id = Integer.valueOf(req.getParameter("id"));
@@ -78,7 +78,10 @@ public class EmployeeWeb extends HttpServlet {
       String username = String.valueOf(req.getParameter("username"));
       String password = String.valueOf(req.getParameter("password"));
       String name = String.valueOf(req.getParameter("name"));
+      System.out.println("here");
       revatureService.updateEmployee(position, email, contact, username, password, name);
+      resp.getWriter().write(om.writeValueAsString("done"));
+      System.out.println("done");
     }else if(tokens[3].equals("submit")) {
       Integer id = Integer.valueOf(req.getParameter("id"));
       String type = String.valueOf(req.getParameter("type"));

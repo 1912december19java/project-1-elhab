@@ -60,7 +60,7 @@ public class ManagerWeb extends HttpServlet {
       session.setAttribute("id", manager.getId());
     }
       resp.getWriter().write(om.writeValueAsString(manager));
-    } else resp.getWriter().write(om.writeValueAsString(null));
+    } else resp.sendRedirect("http://www.javatpoint.com");  ;
     }
     else if(tokens[3].equals("resolved")) {
       Integer id = Integer.valueOf(req.getParameter("id"));
