@@ -24,26 +24,27 @@ public class RevatureService<Reimbursment> {
     return daoPostgress.getEmployee(username);
   }
 
- public List<com.revature.models.Reimbursment> getReimbersment(int employee_id) {
+ public List<com.revature.models.Reimbursment> getReimbursment(int employee_id) {
     return  daoPostgress.getReimbursment(employee_id);
+    //getReimbursmen
  }
 
   public void saveReimbursment(String type, double amount, int employeeId, String receipImage) {
   
     daoPostgress.saveReimbursment( type, amount,employeeId, receipImage);
   }
-  public List<com.revature.models.Reimbursment> getReimbersments(String status){
+  public List<com.revature.models.Reimbursment> getReimbursments(String status){
     return daoPostgress.getReimbursments(status);
   }
-  public void updateEmployeeupdateEmployee(String position, String email, Long contact, String username, String password, String name) {
+  public void updateEmployee(String position, String email, Long contact, String username, String password, String name) {
     daoPostgress.updateEmployee(position, email, contact, username, password, name);
   }
   
   public Manager getManager(String username) {
     return daoPostgress.getManager(username);
   }
-  public void updateReimStatus(String status, String username) {
-    daoPostgress.updateReimStatus(status, username);
+  public void updateReimStatus(String status, int id) {
+    daoPostgress.updateReimStatus(status, id);
   }
   public List<String> getAllImageRecei(){
     return daoPostgress.getAllImageRecei();
@@ -51,5 +52,11 @@ public class RevatureService<Reimbursment> {
   public List<Employee> getAllEmployee(){
     return daoPostgress.getAllEmployee();
   }
- 
+  public List<com.revature.models.Reimbursment> getPendingRequests(int employee_id) {
+    return  daoPostgress.getPendingRequests(employee_id);
+  }
+  public List<Reimbursment> getResolvedRequests(int employee_id) {
+    return (List<Reimbursment>) daoPostgress.getResolvedRequests(employee_id);
+    
+  }
 }

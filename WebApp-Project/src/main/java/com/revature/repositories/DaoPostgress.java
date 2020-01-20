@@ -71,7 +71,7 @@ public class DaoPostgress implements Dao {
     try {
    
       stmt = conn.prepareStatement(
-          "INSERT INTO reimbursments(request_type, amount,status, employee_id, receipt_image) VALUES (?,?,?,?)");
+          "INSERT INTO reimbursments(request_type, amount,status, employee_id, receipt_image) VALUES (?,?,?,?,?)");
 
       stmt.setString(1, type);
       stmt.setDouble(2, amount);
@@ -117,7 +117,7 @@ public class DaoPostgress implements Dao {
     case "approved":
     try {
       PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? "); 
-      stm.setString(1,"Approved");
+      stm.setString(1,"approved");
       if (stm.execute()) {
         rs = stm.getResultSet();
       }
@@ -157,6 +157,26 @@ public class DaoPostgress implements Dao {
     try {
       PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments"); 
       
+      if (stm.execute()) {
+        rs = stm.getResultSet();
+      }
+      while (rs.next()) {
+
+        reimbursment.add(new Reimbursment(rs.getInt("id"),rs.getString("request_type"),rs.getDouble("amount"),rs.getString("status"),
+            rs.getInt("employee_id"), rs.getInt("managers_id"),rs.getString("receipt_image") )  );
+      }
+      
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    
+    return reimbursment;
+    case "rseolved":
+    try {
+      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? or status = ?"); 
+      stm.setString(1,"denied");
+      stm.setString(2,"approved");
       if (stm.execute()) {
         rs = stm.getResultSet();
       }
@@ -220,14 +240,14 @@ public class DaoPostgress implements Dao {
     return manager;
   }
 
-  public void updateReimStatus(String status,String username) {
+  public void updateReimStatus(String status,int id) {
     PreparedStatement stmt = null;
     try {
-        stmt = conn.prepareStatement("UPDATE reimbursments SET status =  ?  WHERE username = ?");
+        stmt = conn.prepareStatement("UPDATE reimbursments SET status =  ?  WHERE id = ?");
       
 
       stmt.setString(1, status);
-      stmt.setString(2, username);
+      stmt.setInt(2, id);
       
       stmt.execute();
     } catch (SQLException e) {
@@ -236,12 +256,7 @@ public class DaoPostgress implements Dao {
 
   }
 
-//  public List<Reimbursment> getAllReimb(String status) {
-//    
-//    
-//    
-//    return null;
-//  }
+
 
   public List<String> getAllImageRecei() {
     
@@ -325,10 +340,37 @@ public class DaoPostgress implements Dao {
     PreparedStatement stmt = null;
   
     try {
-      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? or status = 2 & employee_id=? "); 
-      stm.setString(1,"pending");
+//      SELECT * FROM reimbursments where (status = 'approved' or status = 'denied')AND employee_id=1;
+      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? or status = ?  AND employee_id=? "); 
+      stm.setString(1,"denied");
       stm.setString(2,"approved");
       stm.setInt(3,employee_id);
+      if (stm.execute()) {
+        rs = stm.getResultSet();
+      }
+      while (rs.next()) {
+
+        reimbursment.add(new Reimbursment(rs.getInt("id"),rs.getString("request_type"),rs.getDouble("amount"),rs.getString("status"),
+            rs.getInt("employee_id"), rs.getInt("managers_id"),rs.getString("receipt_image") )  );
+      }
+      
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    
+    return reimbursment;
+  }
+  public List<Reimbursment> getPendingRequests(int employee_id) {
+    
+    List<Reimbursment> reimbursment = new ArrayList<Reimbursment>();
+    ResultSet rs = null;
+    PreparedStatement stmt = null;
+  
+    try {
+      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ?  & employee_id=? "); 
+      stm.setString(1,"pending");      
+      stm.setInt(2,employee_id);
       if (stm.execute()) {
         rs = stm.getResultSet();
       }

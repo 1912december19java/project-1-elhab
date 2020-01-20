@@ -13,7 +13,7 @@ public interface Dao {
   public void updateEmployee(String position, String email, Long contact, String username, String password, String name);
   
   public Manager getManager(String username);
-  public void updateReimStatus(String status, String username);
+  public void updateReimStatus(String status, int id);
 //  public List<Reimbursment> getAllReimb(String status);
   public List<String> getAllImageRecei();
   public List<Employee> getAllEmployee();
