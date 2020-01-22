@@ -197,10 +197,11 @@ public class DaoPostgress implements Dao {
     return null;
   }
 
-  public void updateEmployee(String position, String email, Long contact, String username, String password, String name) {
+  public void updateEmployee(String position, String email, Long contact, String username, String password, String name, int id ) {
     PreparedStatement stmt = null;
     try {
-        stmt = conn.prepareStatement( "UPDATE employee SET position_role=?, email_adress=?, contact_number=?, username=?, PASSWORD=? WHERE name = ?");
+//      UPDATE employee SET position_role='a', email_adress='a', contact_number=555555,  username='a', password='', name = 'a' WHERE id = 11;
+        stmt = conn.prepareStatement( "UPDATE employee SET position_role=?, email_adress=?, contact_number=?,  username=?, password=?, name = ? WHERE id = ?");
       
 
       stmt.setString(1, position);
@@ -208,7 +209,8 @@ public class DaoPostgress implements Dao {
       stmt.setLong(3,contact);
       stmt.setString(4, username);
       stmt.setString(5,password);
-      stmt.setString(6, name);
+      stmt.setString(6,name);
+      stmt.setInt(7, id);
       
       stmt.execute();
     } catch (SQLException e) {
@@ -341,10 +343,11 @@ public class DaoPostgress implements Dao {
   
     try {
 //      SELECT * FROM reimbursments where (status = 'approved' or status = 'denied')AND employee_id=1;
-      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? or status = ?  AND employee_id=? "); 
-      stm.setString(1,"denied");
-      stm.setString(2,"approved");
-      stm.setInt(3,employee_id);
+      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? AND employee_id=? "); 
+//      or status = ? 
+//      stm.setString(1,"denied");
+      stm.setString(1,"approved");
+      stm.setInt(2,employee_id);
       if (stm.execute()) {
         rs = stm.getResultSet();
       }
@@ -368,7 +371,7 @@ public class DaoPostgress implements Dao {
     PreparedStatement stmt = null;
   
     try {
-      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ?  & employee_id=? "); 
+      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ?  AND employee_id = ? "); 
       stm.setString(1,"pending");      
       stm.setInt(2,employee_id);
       if (stm.execute()) {

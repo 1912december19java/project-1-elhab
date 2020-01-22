@@ -17,7 +17,7 @@ import com.revature.repositories.DaoPostgress;
 import com.revature.services.RevatureService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebServlet(name = "Testing", urlPatterns = {"/dao/*"})
+@WebServlet(name = "Testing", urlPatterns = {"/employee/*"})
 public class EmployeeWeb extends HttpServlet {
 
   private RevatureService revatureService;
@@ -60,9 +60,14 @@ public class EmployeeWeb extends HttpServlet {
       session.setAttribute("id", employee.getId());
     }
       resp.getWriter().write(om.writeValueAsString(employee));
-    } else resp.sendRedirect("http://www.javatpoint.com");  ;
+    } else {
+      resp.getWriter().write(om.writeValueAsString(null));
+     // resp.sendRedirect("http://www.javatpoint.com"); 
+    }
+    
     }
     else if(tokens[3].equals("resolved")) {
+      System.out.println(session.getAttribute("id"));  
       Integer id = Integer.valueOf(req.getParameter("id"));
       List<Reimbursment> reimbursment =  revatureService.getResolvedRequests(id);
       resp.getWriter().write(om.writeValueAsString(reimbursment));
@@ -79,17 +84,16 @@ public class EmployeeWeb extends HttpServlet {
       String password = String.valueOf(req.getParameter("password"));
       String name = String.valueOf(req.getParameter("name"));
       System.out.println("here");
-      revatureService.updateEmployee(position, email, contact, username, password, name);
+      revatureService.updateEmployee(position, email, contact, username, password, name, id);
       resp.getWriter().write(om.writeValueAsString("done"));
       System.out.println("done");
     }else if(tokens[3].equals("submit")) {
       Integer id = Integer.valueOf(req.getParameter("id"));
       String type = String.valueOf(req.getParameter("type"));
       Double amount = Double.valueOf(req.getParameter("amount"));
-      Integer employeeId = Integer.valueOf(req.getParameter("employeeId"));
       String receipImage = String.valueOf(req.getParameter("receipImage"));
       System.out.println("here");
-      revatureService.saveReimbursment(type, amount, employeeId, receipImage);
+      revatureService.saveReimbursment(type, amount, id, receipImage);
       resp.getWriter().write(om.writeValueAsString("done"));
       System.out.println("done");
     }

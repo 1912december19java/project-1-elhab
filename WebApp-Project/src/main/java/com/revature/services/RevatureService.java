@@ -36,8 +36,8 @@ public class RevatureService<Reimbursment> {
   public List<com.revature.models.Reimbursment> getReimbursments(String status){
     return daoPostgress.getReimbursments(status);
   }
-  public void updateEmployee(String position, String email, Long contact, String username, String password, String name) {
-    daoPostgress.updateEmployee(position, email, contact, username, password, name);
+  public void updateEmployee(String position, String email, Long contact, String username, String password, String name, int id) {
+    daoPostgress.updateEmployee(position, email, contact, username, password, name, id);
   }
   
   public Manager getManager(String username) {
