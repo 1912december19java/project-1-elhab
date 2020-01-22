@@ -87,6 +87,7 @@ public class ManagerWeb extends HttpServlet {
       Integer id = Integer.valueOf(req.getParameter("id"));
       String status =req.getParameter("status");
       revatureService.updateReimStatus(status, id);
+      resp.getWriter().write(om.writeValueAsString("done"));
       System.out.println("reached");
     }else if(tokens[3].equals("AllReimbursments")) {
       Integer id = Integer.valueOf(req.getParameter("id"));

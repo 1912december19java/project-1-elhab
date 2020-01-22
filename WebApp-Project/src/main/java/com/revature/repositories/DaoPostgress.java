@@ -172,7 +172,7 @@ public class DaoPostgress implements Dao {
 
     
     return reimbursment;
-    case "rseolved":
+    case "resolved":
     try {
       PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? or status = ?"); 
       stm.setString(1,"denied");
@@ -343,11 +343,11 @@ public class DaoPostgress implements Dao {
   
     try {
 //      SELECT * FROM reimbursments where (status = 'approved' or status = 'denied')AND employee_id=1;
-      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? AND employee_id=? "); 
-//      or status = ? 
-//      stm.setString(1,"denied");
-      stm.setString(1,"approved");
-      stm.setInt(2,employee_id);
+      PreparedStatement stm = conn.prepareStatement("SELECT * FROM reimbursments where status = ? or status = ? AND employee_id=? "); 
+//       
+      stm.setString(1,"denied");
+      stm.setString(2,"approved");
+      stm.setInt(3,employee_id);
       if (stm.execute()) {
         rs = stm.getResultSet();
       }
